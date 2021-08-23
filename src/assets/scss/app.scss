@@ -1,0 +1,88 @@
+@import "~vue-material/dist/theme/engine";
+
+@include md-register-theme("default", (
+  primary: #3fffbe,
+  accent: #ffff,
+  theme: dark
+));
+
+@import "~vue-material/dist/theme/all";
+
+//Inicio Icones
+.dash{
+  background-image: url('../icons/dashboard.png');
+  background-repeat: no-repeat;
+  background-size: auto;
+  width: 25px;
+  height: 30px;
+}
+
+.estufa-planta{
+  background-image: url('../icons/planta.png');
+  background-repeat: no-repeat;
+  background-size: auto;
+  width: 25px;
+  height: 30px;
+}
+
+.estufa-sensor{
+  background-image: url('../icons/sensor.png');
+  background-repeat: no-repeat;
+  background-size: auto;
+  width: 25px;
+  height: 30px;
+}
+.estufa-fertilizante{
+  background-image: url('../icons/fertilizante.png');
+  background-repeat: no-repeat;
+  background-size: auto;
+  width: 25px;
+  height: 30px;
+}
+//Fim Icones
+
+.grid{
+ margin-top: 10px;
+ max-height: 80%;
+ height: 100%;
+}
+
+.colorcard{
+  background:linear-gradient(135deg, #184e68 0%,#57ca85 100%);
+  width: 32%;
+}
+.colorcard2{
+  background:linear-gradient(135deg, #65799b 0%,#5e2563 100%);
+  width: 32%;
+}
+.colorcard3{
+  background:linear-gradient(135deg, #f02fc2 0%,#6094ea 100%);
+  width: 32%;
+}
+
+@mixin scrollbars($size, $foreground-color, $background-color: mix($foreground-color, white,  50%)) {
+  &::-webkit-scrollbar {
+    width:  5px;
+    height: $size;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $foreground-color;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $background-color;
+  }
+}
+.smscenter{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.smsrigt{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: right;
+}
