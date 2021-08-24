@@ -20,9 +20,9 @@
     </div>
     <div>
         <div class="router">
-        <transition name="animati">
+        <!-- <transition name="animati"> -->
           <router-view/>
-        </transition>
+        <!-- </transition> -->
       </div>
     </div>
   </div>
