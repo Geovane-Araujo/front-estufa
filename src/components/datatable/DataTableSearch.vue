@@ -1,20 +1,29 @@
 <template>
   <div>
-    <Dialog header="Confirmation" :visible.sync="showDataSearch" :style="{width: '40vw'}" :modal="true">
-      <div>
-        <DataTable :loading="loading" :selection.sync="selecionado" selectionMode="single" scrollHeight="68vh" :scrollable="true" class="p-datatable-sm" :value="obj">
-          <Column :headerStyle="'width:'+col.length+'px'" headerClass="altura" :bodyStyle="'width:'+col.length+'px'" v-for="col of columns" :field="col.field" :header="col.header" :key="col.field"></Column>
-        </DataTable>
-        <div class="pagginator">
-          <Paginator :rows="20" @page="onPage($event)" :totalRecords="total">
-            <template #right="slotProps">
-              Pagina: {{slotProps.state.page + 1}}
-              Registros: {{slotProps.state.first}}
-              Registros por Pagina: {{slotProps.state.rows}}
-            </template>
-          </Paginator>
+    <Dialog header="Busca Itens" :visible.sync="showDataSearch" :style="{width: '50vw'}" :modal="true">
+      <div class="p-fluid row">
+        <div class="p-field col-sm-12">
+          <label>Descricao</label>
+          <InputText @keyup.stop="onSearch(search)" v-model="search" type="text" />
+        </div>
+        <div class="p-field col-sm-12">
+          <DataTable @row-select="onSelected" :loading="loading" :selection.sync="selecionado" selectionMode="single" scrollHeight="40vh" :scrollable="true" class="p-datatable-sm" :value="obj">
+            <Column  v-for="col of columns" :field="col" :header="col" :key="col"></Column>
+          </DataTable>
+          <div class="pagginator">
+            <Paginator :rows="20" @page="onPage($event)" :totalRecords="total">
+              <template #right="slotProps">
+                Pagina: {{slotProps.state.page + 1}}
+                Registros: {{slotProps.state.first}}
+                Registros por Pagina: {{slotProps.state.rows}}
+              </template>
+            </Paginator>
+          </div>
         </div>
       </div>
+      <template #footer>
+        <Button label="Cancelar" class="p-button-outlined" @click="showDataSearch=false"/>
+      </template>
     </Dialog>
   </div>
 </template>
@@ -42,20 +51,13 @@ export default {
       search: '',
       selectedFilter: '',
       iddelete: 0,
-      combobox: [
-        {
-          name: '',
-          code: ''
-        }
-      ]
+      route: '',
+      objectRoute: ''
     }
   },
   props: {
     title: {
       type: String
-    },
-    objectRoute: {
-      type: Object
     },
     columns: {
       type: Array
@@ -71,50 +73,44 @@ export default {
     InputText
   },
   methods: {
-    onSelect (items) {
-      alert('Chegou Aqui')
-      this.itens = items
-    },
-    async getAll (objectRoute) {
-      this.showDataSearch = true
-      if (objectRoute === '') {
-        objectRoute = this.objectRoute
-      } else {
-        this.objectRoute = objectRoute
-      }
-      this.loading = true
+    async getAll (objectRoute, route, tp) {
+      sessionStorage.setItem('objDataSearchRoute', JSON.stringify(objectRoute))
       await axios.post(http.url + 'dynamic', objectRoute, { headers: { Authorization: 'Bearer ' + sessionStorage.getItem('token') } }).then(res => {
         if (res.data.ret === 'success') {
           this.obj = res.data.obj.obj
           this.total = res.data.obj.rows
-          this.objectRoute = objectRoute
+          this.route = route
         } else {
           this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: res.data.motivo, life: 3000 })
         }
-        this.loading = false
+        if (tp === 0) {
+          this.showDataSearch = true
+        }
       }).catch(err => {
         this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: err, life: 3000 })
       })
     },
     onPage (event) {
+      this.objectRoute = JSON.parse(sessionStorage.getItem('objDataSearchRoute'))
       this.objectRoute.pagging = event.page + 1
-      this.getAll(this.objectRoute)
+      this.getAll(this.objectRoute, this.route, 1)
     },
     onSearch (key) {
+      this.objectRoute = JSON.parse(sessionStorage.getItem('objDataSearchRoute'))
       var filter = key.split(':')
       var fi = ''
       if (filter.length > 1) {
         fi = ' and CAST(' + filter[0] + ' as varchar) like \'%' + filter[1] + '%\''
         this.objectRoute.filters = fi
-        this.getAll(this.objectRoute)
+        this.getAll(this.objectRoute, this.route, 1)
       } else {
         this.objectRoute.filters = ''
-        this.getAll(this.objectRoute)
+        this.getAll(this.objectRoute, this.route, 1)
       }
     },
-    onSelected () {
-      this.iddelete = this.selecionado[0].id
-      this.showDeleted = true
+    onSelected (item) {
+      this.onDestroy(item.data, this.route, 1)
+      this.showDataSearch = false
     }
   }
 }

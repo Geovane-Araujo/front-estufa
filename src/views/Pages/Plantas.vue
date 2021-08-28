@@ -2,7 +2,7 @@
   <div class="plantas">
     <loading v-model="isLoading" loader="spinner" color="#000" :can-cancel="true" :is-full-page="true"/>
     <div style="margin-bottom: 20px">
-      <h3>Cadastro de Plantas</h3>
+      <h3>Plantas</h3>
     </div>
     <div class="grid">
       <datatabe-estufa classname="plantas" :onGetById="onGetById" :columns="fields" ref="datagrid"/>
@@ -36,35 +36,50 @@
                   <label for="win_planta_categoria">Categoria</label>
                   <Textarea id="win_planta_nome" v-model="form.categoria" type="text" />
               </div>
-              <div class="p-field col-sm-12">
-                <DataTable :value="fasescrecimento" editMode="cell" class="editable-cells-table">
-                  <Column field="Fase" header="Fase"></Column>
-                  <Column field="Luminosidade" header="Luminosidade">
-                      <template #editor="slotProps">
-                          <InputText v-model="slotProps.data[slotProps.column.field]" />
-                      </template>
-                  </Column>
-                  <Column field="ph" header="Ph">
-                      <template #editor="slotProps">
-                          <InputText v-model="slotProps.data[slotProps.column.field]" />
-                      </template>
-                  </Column>
-                  <Column field="Humidade" header="Humidade">
-                      <template #editor="slotProps">
-                          <InputText v-model="slotProps.data[slotProps.column.field]" />
-                      </template>
-                  </Column>
-                  <Column field="Temperatura" header="Temperatura">
-                      <template #editor="slotProps">
-                          <InputText v-model="slotProps.data[slotProps.column.field]" />
-                      </template>
-                  </Column>
-                </DataTable>
-              </div>
             </div>
           </TabPanel>
+          <TabPanel header="Fases Crecimento">
+            <div class="p-field col-sm-12">
+              <label >Fases</label>
+                <div class="p-inputgroup">
+                  <InputText  type="text" />
+                  <Button icon="pi pi-search"/>
+              </div>
+            </div>
+            <div class="p-field col-sm-12">
+                <DataTable :value="fasescrecimento" editMode="cell" class="editable-cells-table">
+                    <Column field="Fase" header="Fase"></Column>
+                    <Column field="Luminosidade" header="Luminosidade">
+                        <template #editor="slotProps">
+                            <InputText v-model="slotProps.data[slotProps.column.field]" />
+                        </template>
+                    </Column>
+                    <Column field="ph" header="Ph">
+                        <template #editor="slotProps">
+                            <InputText v-model="slotProps.data[slotProps.column.field]" />
+                        </template>
+                    </Column>
+                    <Column field="Humidade" header="Humidade">
+                        <template #editor="slotProps">
+                            <InputText v-model="slotProps.data[slotProps.column.field]" />
+                        </template>
+                    </Column>
+                    <Column field="Temperatura" header="Temperatura">
+                        <template #editor="slotProps">
+                            <InputText v-model="slotProps.data[slotProps.column.field]" />
+                        </template>
+                    </Column>
+                  </DataTable>
+              </div>
+          </TabPanel>
           <TabPanel header="Nutrientes">
-            <Button label="Adicionar" class="p-button-outlined p-button-info"/>
+            <div class="p-field col-sm-12">
+              <label >Nutrientes</label>
+                <div class="p-inputgroup">
+                  <InputText  type="text" />
+                  <Button icon="pi pi-search"/>
+              </div>
+            </div>
             <div class="p-field col-sm-12">
                 <DataTable :value="fasescrecimento" editMode="cell" class="editable-cells-table">
                   <Column :headerStyle="'width: 10%;'" :bodyStyle="'width: 95%;'" field="Nutriente" header="Nutriente"></Column>

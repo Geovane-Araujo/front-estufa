@@ -25,6 +25,21 @@ const routes = [
         path: '/nutrientes',
         name: 'Nutrientes',
         component: () => import('../views/Pages/Nutrientes.vue')
+      },
+      {
+        path: '/fases',
+        name: 'FasesCrecimento',
+        component: () => import('../views/Pages/FasesCrecimento.vue')
+      },
+      {
+        path: '/estufas',
+        name: 'Estufas',
+        component: () => import('../views/Pages/Estufas.vue')
+      },
+      {
+        path: '/usuarios',
+        name: 'Usuarios',
+        component: () => import('../views/Pages/Usuarios.vue')
       }
     ]
   },

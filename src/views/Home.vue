@@ -28,14 +28,24 @@ export default {
             route: 'Nutrientes'
           },
           {
-            name: 'Sensores',
+            name: 'Fases Crecimento',
+            icon: 'estufa-fases',
+            route: 'FasesCrecimento'
+          },
+          {
+            name: 'Controladores',
             icon: 'estufa-sensor',
             route: 'Detalhes'
           },
           {
+            name: 'Estufas',
+            icon: 'estufa-estufa',
+            route: 'Estufas'
+          },
+          {
             name: 'Usuarios',
-            icon: 'dash',
-            route: 'Detalhes'
+            icon: 'estufa-user',
+            route: 'Usuarios'
           }
         ]
       }

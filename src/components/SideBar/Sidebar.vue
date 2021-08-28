@@ -109,7 +109,7 @@ $isMobile: 50px;
   height: 73vh;
   width: $isDesktop;
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
   .sidebar{
     width: $isMobile;
     overflow: visible;

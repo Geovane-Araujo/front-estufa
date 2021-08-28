@@ -1,22 +1,18 @@
 <template>
-  <div class="nutrientes">
+  <div class="setorestufa">
     <loading v-model="isLoading" loader="spinner" color="#000" :can-cancel="true" :is-full-page="true"/>
     <div style="margin-bottom: 20px">
-      <h3>Nutrientes</h3>
+      <h3>Fases Crecimento</h3>
     </div>
     <div class="grid">
-      <datatabe-estufa classname="nutrientes" :onGetById="onGetById" :columns="fields" ref="datagrid"/>
+      <datatabe-estufa classname="fases_crecimento" :onGetById="onGetById" :columns="fields" ref="datagrid"/>
     </div>
     <div>
-      <Dialog :style="{width: '30vw'}" header="Cadastro Nutrientes" :visible.sync="showModal" :modal="true">
+      <Dialog :style="{width: '30vw'}" header="Cadastro Fases Crecimento" :visible.sync="showModal" :modal="true">
         <div class="p-fluid row">
-          <div class="p-field col-sm-8">
-              <label for="win_planta_descricao">Descricao</label>
-              <InputText v-model="form.descricao" id="win_planta_descricao" type="text" />
-          </div>
-          <div class="p-field col-sm-4">
-              <label for="win_planta_un">Unidade Medida</label>
-              <InputText v-model="form.un" id="win_planta_un" type="text" />
+          <div class="p-field col-sm-12">
+              <label for="win_setorestufa_descricao">Descricao</label>
+              <InputText v-model="form.descricao" id="win_setorestufa_descricao" type="text" />
           </div>
         </div>
         <template #footer>
@@ -42,7 +38,7 @@ export default {
       isLoading: false,
       showModal: false,
       dynamic: {
-        route: 'mnu_nutrientes',
+        route: 'menu_fases',
         pagging: 1,
         filters: '',
         orders: ' id desc'
@@ -57,11 +53,6 @@ export default {
           length: 95,
           field: 'descricao',
           header: 'Descricao'
-        },
-        {
-          length: 10,
-          field: 'un',
-          header: 'Unidade Medida'
         }
       ],
       form: {
@@ -85,7 +76,7 @@ export default {
   },
   methods: {
     onGetById (id) {
-      axios.get(http.url + 'nutrientes/' + id).then(res => {
+      axios.get(http.url + 'fasescrecimento/' + id).then(res => {
         if (res.data.ret === 'success') {
           this.form = res.data.obj
         } else {
@@ -97,7 +88,7 @@ export default {
       })
     },
     onSave (form) {
-      axios.post(http.url + 'nutrientes', form).then(res => {
+      axios.post(http.url + 'fasescrecimento', form).then(res => {
         if (res.data.ret === 'success') {
           this.$toast.add({ severity: 'success', summary: 'Estufa+', detail: 'Salvo com sucesso!!!', life: 3000 })
         } else {
@@ -126,7 +117,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.plantas{
+.setorestufas{
   height: 100%;
 }
 </style>
