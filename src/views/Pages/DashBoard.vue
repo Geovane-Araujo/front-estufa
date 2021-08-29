@@ -6,17 +6,20 @@
       <card v-show="false" styless="colorcard3" :total="totalinativas" description="Total Empresas Inativas"/>
     </div>
     <div class="tabletop">
-      ssdd
+      <Button label="Teste" @click="sendMessage"/>
+      <div v-for="ret in statussensor.medidas" :key="ret">{{ ret }}</div>
     </div>
   </div>
 </template>
 
 <script>
-/* import axios from 'axios'
-import http from '../../router/http' */
+import Button from 'primevue/button'
+import { mapActions, mapState } from 'vuex'
 export default {
   data () {
     return {
+      connection: null,
+      retorno: null,
       form: {
         cnae: '',
         cnpj: '',
@@ -30,20 +33,31 @@ export default {
     }
   },
   mounted () {
-    this.getCards()
+  },
+  components: {
+    Button
   },
   methods: {
-    getCards () {
-      /* axios.post(http.url + 'empresas', this.form).then(res => {
-        if (res.data.ret === 'success') {
-          this.totalgeral = res.data.obj.totalempresas.toLocaleString('pt-BR')
-          this.totalativas = res.data.obj.totalativas.toLocaleString('pt-BR')
-          this.totalinativas = res.data.obj.totalinativas.toLocaleString('pt-BR')
-        }
-      }).catch(err => {
-        console.log(err)
-      }) */
+    ...mapActions('sock', ['ActionRefresh']),
+    sendMessage () {
+      this.connection.send('Teste')
+      this.connection.onmessage = (event) => {
+        this.ActionRefresh(event.data)
+      }
+    },
+    atualiza (message) {
+      this.retorno.push(message)
     }
+  },
+  created () {
+    this.connection = new WebSocket('ws://localhost:8083/controladores')
+
+    this.connection.onopen = function (event) {
+      console.log(event.data)
+    }
+  },
+  computed: {
+    ...mapState('sock', ['statussensor'])
   }
 }
 </script>

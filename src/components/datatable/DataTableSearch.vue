@@ -75,11 +75,12 @@ export default {
   methods: {
     async getAll (objectRoute, route, tp) {
       sessionStorage.setItem('objDataSearchRoute', JSON.stringify(objectRoute))
+      sessionStorage.setItem('route', route)
       await axios.post(http.url + 'dynamic', objectRoute, { headers: { Authorization: 'Bearer ' + sessionStorage.getItem('token') } }).then(res => {
         if (res.data.ret === 'success') {
           this.obj = res.data.obj.obj
           this.total = res.data.obj.rows
-          this.route = route
+          this.route = sessionStorage.getItem('route')
         } else {
           this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: res.data.motivo, life: 3000 })
         }

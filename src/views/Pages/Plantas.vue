@@ -43,32 +43,53 @@
               <label >Fases</label>
                 <div class="p-inputgroup">
                   <InputText  type="text" />
-                  <Button icon="pi pi-search"/>
+                  <Button @click="onDataSearch('fase')" icon="pi pi-search"/>
               </div>
             </div>
             <div class="p-field col-sm-12">
-                <DataTable :value="fasescrecimento" editMode="cell" class="editable-cells-table">
-                    <Column field="Fase" header="Fase"></Column>
-                    <Column field="Luminosidade" header="Luminosidade">
+                <DataTable :value="form.fases" editMode="cell" class="editable-cells-table">
+                    <Column :headerStyle="'width: 20%;'" :bodyStyle="'width: 20%;'" field="descricao" header="Fase"></Column>
+                    <Column :headerStyle="'width: 15%;'" :bodyStyle="'width: 15%;'" field="luminosidade" header="Luminosidade">
                         <template #editor="slotProps">
-                            <InputText v-model="slotProps.data[slotProps.column.field]" />
+                          <div class="p-fluid">
+                            <div class="p-field col-sm-12">
+                              <InputText v-model="slotProps.data[slotProps.column.field]" />
+                            </div>
+                          </div>
                         </template>
                     </Column>
-                    <Column field="ph" header="Ph">
+                    <Column :headerStyle="'width: 15%;'" :bodyStyle="'width: 15%;'" field="ph" header="Ph">
                         <template #editor="slotProps">
-                            <InputText v-model="slotProps.data[slotProps.column.field]" />
+                          <div class="p-fluid">
+                            <div class="p-field col-sm-12">
+                              <InputText v-model="slotProps.data[slotProps.column.field]" />
+                            </div>
+                          </div>
                         </template>
                     </Column>
-                    <Column field="Humidade" header="Humidade">
+                    <Column :headerStyle="'width: 15%;'" :bodyStyle="'width: 15%;'" field="humidade" header="Humidade">
                         <template #editor="slotProps">
-                            <InputText v-model="slotProps.data[slotProps.column.field]" />
+                          <div class="p-fluid">
+                            <div class="p-field col-sm-12">
+                              <InputText v-model="slotProps.data[slotProps.column.field]" />
+                            </div>
+                          </div>
                         </template>
                     </Column>
-                    <Column field="Temperatura" header="Temperatura">
+                    <Column :headerStyle="'width: 15%;'" :bodyStyle="'width: 15%;'" field="temperatura" header="Temperatura">
                         <template #editor="slotProps">
-                            <InputText v-model="slotProps.data[slotProps.column.field]" />
+                          <div class="p-fluid">
+                            <div class="p-field col-sm-12">
+                              <InputText v-model="slotProps.data[slotProps.column.field]" />
+                            </div>
+                          </div>
                         </template>
                     </Column>
+                    <Column :headerStyle="'width: 5%;'" :bodyStyle="'width: 5%;'">
+                      <template #body="slotProps">
+                          <Button icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-tex" @click="onRemoveTable('fase', slotProps.data, slotProps)" />
+                      </template>
+                  </Column>
                   </DataTable>
               </div>
           </TabPanel>
@@ -77,16 +98,21 @@
               <label >Nutrientes</label>
                 <div class="p-inputgroup">
                   <InputText  type="text" />
-                  <Button icon="pi pi-search"/>
+                  <Button @click="onDataSearch('nutri')"  icon="pi pi-search"/>
               </div>
             </div>
             <div class="p-field col-sm-12">
-                <DataTable :value="fasescrecimento" editMode="cell" class="editable-cells-table">
-                  <Column :headerStyle="'width: 10%;'" :bodyStyle="'width: 95%;'" field="Nutriente" header="Nutriente"></Column>
-                  <Column :headerStyle="'width: 5%;'" :bodyStyle="'width: 5%;'" field="Quantidade" header="Quantidade">
+                <DataTable :value="form.plnutrientes" editMode="cell" class="editable-cells-table">
+                  <Column :headerStyle="'width: 35vw;'" :bodyStyle="'width: 35vw;'" field="descricao" header="Nutriente"></Column>
+                  <Column :headerStyle="'width: 13vw;'" :bodyStyle="'width: 13vw;'" field="quantidade" header="Quantidade">
                       <template #editor="slotProps">
                           <InputText v-model="slotProps.data[slotProps.column.field]" />
                       </template>
+                  </Column>
+                  <Column header="X" :headerStyle="'width: 5vw;'" :bodyStyle="'width: 5vw;'" >
+                    <template #body="slotProps">
+                      <Button icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-tex" @click="onRemoveTable('nutri', slotProps.data, slotProps)" />
+                    </template>
                   </Column>
                 </DataTable>
               </div>
@@ -97,6 +123,9 @@
           <Button label="Cancelar" class="p-button-outlined" @click="showModal=false"/>
         </template>
       </Dialog>
+    </div>
+    <div class="datasearch">
+      <datasearch-estufa :columns="ds.columns" :onDestroy="onDestroy" ref="datasearch"/>
     </div>
   </div>
 </template>
@@ -114,22 +143,22 @@ import axios from 'axios'
 import VueLoading from 'vue-loading-overlay'
 import Button from 'primevue/button'
 import 'vue-loading-overlay/dist/vue-loading.css'
+var FASES_EXCLUIDAS = []
+var NUTRIENTES_EXCLUIDOS = []
+
 export default {
   data () {
     return {
       isLoading: false,
       showModal: false,
-      fasescrecimento: [
-        {
-          id: 0,
-          fase: 'Broderagem'
-        }
-      ],
       dynamic: {
         route: 'menu_plantas',
         pagging: 1,
         filters: '',
         orders: ' id desc'
+      },
+      ds: {
+        columns: []
       },
       fields: [
         {
@@ -164,7 +193,9 @@ export default {
         familia: '',
         luminosidade: '',
         ciclovida: '',
-        categoria: ''
+        categoria: '',
+        plnutrientes: [],
+        fases: []
       }
     }
   },
@@ -212,13 +243,98 @@ export default {
       if (this.form.nome === '') {
         this.$toast.add({ severity: 'warn', summary: 'Estufa+', detail: 'Descricao não pode ficar em branco', life: 3000 })
       } else {
+        if (FASES_EXCLUIDAS.length > 0) {
+          this.onValidateArrays(FASES_EXCLUIDAS, 0)
+        }
+        if (NUTRIENTES_EXCLUIDOS.length > 0) {
+          this.onValidateArrays(NUTRIENTES_EXCLUIDOS, 1)
+        }
         this.onSave(this.form)
       }
     },
     onGetDynamic () {
       this.isLoading = true
       this.$refs.datagrid.getAll(this.dynamic)
-      // this.isLoading = false
+    },
+    onDataSearch (route) {
+      if (route === 'nutri') {
+        var dynamic = {
+          route: 'expl_nutrientes',
+          pagging: 1,
+          filters: '',
+          orders: ' id desc'
+        }
+        this.ds.columns = ['id', 'descricao']
+        this.$refs.datasearch.getAll(dynamic, 'nutri', 0)
+      } else {
+        dynamic = {
+          route: 'expl_fases',
+          pagging: 1,
+          filters: '',
+          orders: ' id desc'
+        }
+        this.ds.columns = ['id', 'descricao']
+        this.$refs.datasearch.getAll(dynamic, 'fase', 0)
+      }
+    },
+    onDestroy (obj, route) {
+      if (route === 'nutri') {
+        var plnutri = {
+          add: true,
+          edit: false,
+          del: false,
+          id: 0,
+          idnutriente: '',
+          descricao: '',
+          idplanta: '',
+          quantidade: ''
+        }
+        plnutri.descricao = obj.descricao
+        console.log(obj.id)
+        plnutri.idnutriente = obj.id
+        this.form.plnutrientes.push(plnutri)
+      } else {
+        var fspl = {
+          add: true,
+          edit: false,
+          del: false,
+          id: 0,
+          idplanta: '',
+          descricao: '',
+          idfase: '',
+          temperatura: '',
+          humidade: '',
+          nivelagua: '',
+          ph: '',
+          luminosidade: ''
+        }
+        fspl.descricao = obj.descricao
+        fspl.idfase = obj.id
+        this.form.fases.push(fspl)
+      }
+    },
+    onRemoveTable (table, obj, e) {
+      console.log(e)
+      if (table === 'fase') {
+        FASES_EXCLUIDAS.push(obj)
+        this.form.fases.splice(e.index)
+      } else {
+        NUTRIENTES_EXCLUIDOS.push(obj)
+        this.form.plnutrientes.splice(e.index)
+      }
+    },
+    onValidateArrays (obj, e) {
+      obj.forEach(item => {
+        if (item.id !== 0) {
+          item.add = false
+          item.del = true
+          if (e === 1) {
+            this.form.fases.push(item)
+          } else {
+            this.form.plnutrientes.push(item)
+          }
+        }
+      })
     }
   }
 }
