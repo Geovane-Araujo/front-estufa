@@ -2,17 +2,17 @@
   <div class="setorestufa">
     <loading v-model="isLoading" loader="spinner" color="#000" :can-cancel="true" :is-full-page="true"/>
     <div style="margin-bottom: 20px">
-      <h3>Fases Crecimento</h3>
+      <h3>Setores Estufa</h3>
     </div>
     <div class="grid">
-      <datatabe-estufa classname="fases_crecimento" :onGetById="onGetById" :columns="fields" ref="datagrid"/>
+      <datatabe-estufa classname="estufa_setor" :onGetById="onGetById" :columns="fields" ref="datagrid"/>
     </div>
     <div>
-      <Dialog :style="{width: '30vw'}" header="Cadastro Fases Crecimento" :visible.sync="showModal" :modal="true">
+      <Dialog :style="{width: '30vw'}" header="Cadastro Setores da Estufa" :visible.sync="showModal" :modal="true">
         <div class="p-fluid row">
           <div class="p-field col-sm-12">
-              <label for="win_setorestufa_descricao">Descricao</label>
-              <InputText v-model="form.descricao" id="win_setorestufa_descricao" type="text" />
+              <label >Descricao</label>
+              <InputText v-model="form.descricao" type="text" />
           </div>
         </div>
         <template #footer>
@@ -38,7 +38,7 @@ export default {
       isLoading: false,
       showModal: false,
       dynamic: {
-        route: 'menu_fases',
+        route: 'menu_estufasetor',
         pagging: 1,
         filters: '',
         orders: ' id desc'
@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     onGetById (id) {
-      axios.get(http.url + 'fasescrecimento/' + id).then(res => {
+      axios.get(http.url + 'estufasetor/' + id).then(res => {
         if (res.data.ret === 'success') {
           this.form = res.data.obj
         } else {
@@ -88,7 +88,7 @@ export default {
       })
     },
     onSave (form) {
-      axios.post(http.url + 'fasescrecimento', form).then(res => {
+      axios.post(http.url + 'estufasetor', form).then(res => {
         if (res.data.ret === 'success') {
           this.$toast.add({ severity: 'success', summary: 'Estufa+', detail: 'Salvo com sucesso!!!', life: 3000 })
         } else {
@@ -117,7 +117,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.setorestufas{
+.setorestufa{
   height: 100%;
 }
 </style>

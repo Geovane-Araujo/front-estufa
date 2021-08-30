@@ -35,12 +35,17 @@ export default {
           {
             name: 'Controladores',
             icon: 'estufa-sensor',
-            route: 'Detalhes'
+            route: 'Controladores'
           },
           {
             name: 'Estufas',
             icon: 'estufa-estufa',
             route: 'Estufas'
+          },
+          {
+            name: 'Setores',
+            icon: 'estufa-setor',
+            route: 'Setores'
           },
           {
             name: 'Usuarios',

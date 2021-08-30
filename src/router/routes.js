@@ -40,6 +40,16 @@ const routes = [
         path: '/usuarios',
         name: 'Usuarios',
         component: () => import('../views/Pages/Usuarios.vue')
+      },
+      {
+        path: '/setorestufa',
+        name: 'Setores',
+        component: () => import('../views/Pages/EstufaSetor.vue')
+      },
+      {
+        path: '/controladores',
+        name: 'Controladores',
+        component: () => import('../views/Pages/Controladores.vue')
       }
     ]
   },
