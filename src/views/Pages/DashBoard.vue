@@ -1,13 +1,12 @@
 <template>
-  <div>
-    <div class="content-card">
-      <card v-show="false" styless="colorcard" :total="totalgeral" description="Total Empresas"/>
-      <card v-show="false" styless="colorcard2" :total="totalativas" description="Total Empresas Ativas"/>
-      <card v-show="false" styless="colorcard3" :total="totalinativas" description="Total Empresas Inativas"/>
-    </div>
+  <div class="dash">
     <div class="tabletop">
-      <Button label="Teste" @click="sendMessage"/>
-      <div v-for="ret in statussensor.medidas" :key="ret">{{ ret }}</div>
+      <Button :label="btn" @click="sendMessage"/>
+    </div>
+    <div class="mno">
+      <div v-for="co in controladores.obj" :key="co.fase" class="monitores">
+        <monitor-estufa :title="co.fase" :ref="co.ref"/>
+      </div>
     </div>
   </div>
 </template>
@@ -20,6 +19,7 @@ export default {
     return {
       connection: null,
       retorno: null,
+      btn: 'Conectar',
       form: {
         cnae: '',
         cnpj: '',
@@ -27,9 +27,7 @@ export default {
         cidade: '',
         ativa: 0
       },
-      totalgeral: 0,
-      totalativas: 0,
-      totalinativas: 0
+      controladores: []
     }
   },
   mounted () {
@@ -40,9 +38,15 @@ export default {
   methods: {
     ...mapActions('sock', ['ActionRefresh']),
     sendMessage () {
-      this.connection.send('Teste')
+      this.connection.send('Me Retorne')
       this.connection.onmessage = (event) => {
-        this.ActionRefresh(event.data)
+        var arRefs = this.$refs
+        var a = event.data.split('?')
+        var i = 0
+        Object.keys(arRefs).forEach(index => {
+          this.$refs[index][0].onResize(a[i])
+          i++
+        })
       }
     },
     atualiza (message) {
@@ -52,8 +56,16 @@ export default {
   created () {
     this.connection = new WebSocket('ws://localhost:8083/controladores')
 
-    this.connection.onopen = function (event) {
-      console.log(event.data)
+    this.connection.onclose = (event) => {
+      console.log('Desconectadp')
+    }
+    this.connection.onopen = (event) => {
+    }
+
+    this.connection.onmessage = (event) => {
+      this.controladores = []
+      this.controladores = JSON.parse(event.data)
+      this.btn = 'Iniciar Monitor'
     }
   },
   computed: {
@@ -73,5 +85,24 @@ export default {
   display: flex;
   flex-wrap: wrap;
   align-content: stretch;
+}
+.dash{
+  height: 100%;
+  width: 100%;
+}
+.mno{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.monitores{
+  height: 48%;
+  width: 48%;
+  margin: 1%;
+  background-color: #2C3E50;
+  -webkit-box-shadow: 8px 9px 10px -2px rgba(0,0,0,0.29);
+  box-shadow: 8px 9px 10px -2px rgba(0,0,0,0.29);
+  border-radius: 10px;
 }
 </style>

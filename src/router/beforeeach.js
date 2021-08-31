@@ -9,6 +9,5 @@ export default async (to, from, next) => {
     next({ name: 'Login' })
   } else {
     next()
-    console.log('next')
   }
 }

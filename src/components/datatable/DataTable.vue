@@ -93,17 +93,12 @@ export default {
       this.itens = items
     },
     async getAll (objectRoute) {
-      if (objectRoute === '') {
-        objectRoute = this.objectRoute
-      } else {
-        this.objectRoute = objectRoute
-      }
       this.loading = true
+      sessionStorage.setItem('objRouteTable', JSON.stringify(objectRoute))
       await axios.post(http.url + 'dynamic', objectRoute, { headers: { Authorization: 'Bearer ' + sessionStorage.getItem('token') } }).then(res => {
         if (res.data.ret === 'success') {
           this.obj = res.data.obj.obj
           this.total = res.data.obj.rows
-          this.objectRoute = objectRoute
         } else {
           this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: res.data.motivo, life: 3000 })
         }
@@ -113,19 +108,21 @@ export default {
       })
     },
     onPage (event) {
-      this.objectRoute.pagging = event.page + 1
-      this.getAll(this.objectRoute)
+      var objR = JSON.parse(sessionStorage.getItem('objRouteTable'))
+      objR.pagging = event.page + 1
+      this.getAll(objR)
     },
     onSearch (key) {
       var filter = key.split(':')
       var fi = ''
+      var objR = JSON.parse(sessionStorage.getItem('objRouteTable'))
       if (filter.length > 1) {
         fi = ' and CAST(' + filter[0] + ' as varchar) like \'%' + filter[1] + '%\''
-        this.objectRoute.filters = fi
-        this.getAll(this.objectRoute)
+        objR.filters = fi
+        this.getAll(objR)
       } else {
-        this.objectRoute.filters = ''
-        this.getAll(this.objectRoute)
+        objR.filters = ''
+        this.getAll(objR)
       }
     },
     onEditing () {
@@ -136,8 +133,7 @@ export default {
       }
     },
     onRefresh () {
-      this.objectRoute.filters = ''
-      this.getAll(this.objectRoute)
+      this.getAll(JSON.parse(sessionStorage.getItem('objRouteTable')))
     },
     onDeleted () {
       this.iddelete = this.selecionado[0].id
@@ -148,7 +144,7 @@ export default {
       axios.delete(http.url + 'dynamicdeleted/' + parseInt(this.iddelete) + '/' + this.classname).then(res => {
         if (res.data.ret === 'success') {
           this.$toast.add({ severity: 'success', summary: 'Estufa+', detail: 'Excluido com sucesso!!!', life: 3000 })
-          this.getAll(this.objectRoute)
+          this.getAll(JSON.parse(sessionStorage.getItem('objRouteTable')))
         }
       }).catch(err => {
         this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: err, life: 3000 })

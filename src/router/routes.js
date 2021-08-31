@@ -7,11 +7,6 @@ const routes = [
     redirect: { name: 'Detalhes', params: { name: 'Detalhes' } },
     children: [
       {
-        path: '/detalhes',
-        name: 'Detalhes',
-        component: () => import('../views/Pages/Detalhes.vue')
-      },
-      {
         path: '/dashboard',
         name: 'DashBoard',
         component: () => import('../views/Pages/DashBoard.vue')

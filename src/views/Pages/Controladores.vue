@@ -12,13 +12,17 @@
         <TabView>
           <TabPanel header="Principal">
             <div class="p-fluid row">
-              <div class="p-field col-sm-8">
+              <div class="p-field col-sm-6">
                   <label >Nome</label>
                   <InputText v-model="form.nome" type="text" />
               </div>
               <div class="p-field col-sm-4">
                   <label>Host(IP ou Nome)</label>
                   <InputText  v-model="form.host" type="text" />
+              </div>
+              <div class="p-field col-sm-2">
+                  <label>Ativo</label>
+                  <Dropdown v-model="selecionado" :options="status" optionLabel="name" />
               </div>
               <div class="p-field col-sm-4">
                   <label>Estufa</label>
@@ -92,6 +96,7 @@ import axios from 'axios'
 import VueLoading from 'vue-loading-overlay'
 import Button from 'primevue/button'
 import 'vue-loading-overlay/dist/vue-loading.css'
+import Dropdown from 'primevue/dropdown'
 var PLANTAS_EXCLUIDAS = []
 
 export default {
@@ -99,6 +104,14 @@ export default {
     return {
       isLoading: false,
       showModal: false,
+      selecionado: {
+        code: 1,
+        name: 'Sim'
+      },
+      status: [
+        { name: 'Sim', code: 1 },
+        { name: 'Não', code: 0 }
+      ],
       dynamic: {
         route: 'menu_controladores',
         pagging: 1,
@@ -161,6 +174,7 @@ export default {
     TabView,
     TabPanel,
     Button,
+    Dropdown,
     loading: VueLoading
   },
   mounted () {
@@ -171,7 +185,7 @@ export default {
       axios.get(http.url + 'controladores/' + id).then(res => {
         if (res.data.ret === 'success') {
           this.form = res.data.obj
-          console.log(this.form)
+          this.selecionado.code = this.form.ativo
         } else {
           this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: res.data.motivo, life: 3000 })
         }
@@ -200,6 +214,7 @@ export default {
         if (PLANTAS_EXCLUIDAS.length > 0) {
           this.onValidateArrays(PLANTAS_EXCLUIDAS, 0)
         }
+        this.form.ativo = this.selecionado.code
         this.onSave(this.form)
       }
     },

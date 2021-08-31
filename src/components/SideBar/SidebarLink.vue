@@ -36,7 +36,6 @@ export default {
   },
   mounted () {
     this.isColapesd = false
-    console.log(this.icon)
   },
   methods: {
     onSelectRoute (route, colapsed) {
