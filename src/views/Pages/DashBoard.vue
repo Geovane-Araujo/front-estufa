@@ -56,9 +56,6 @@ export default {
   created () {
     this.connection = new WebSocket('ws://localhost:8083/controladores')
 
-    this.connection.onclose = (event) => {
-      console.log('Desconectadp')
-    }
     this.connection.onopen = (event) => {
     }
 
@@ -66,6 +63,14 @@ export default {
       this.controladores = []
       this.controladores = JSON.parse(event.data)
       this.btn = 'Iniciar Monitor'
+    }
+  },
+  watch: {
+    $route (to, from) {
+      console.log('Teste')
+    },
+    beforeRouteUpdate (to, from, next) {
+      console.log('Teste')
     }
   },
   computed: {

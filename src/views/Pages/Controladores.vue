@@ -197,12 +197,12 @@ export default {
     onSave (form) {
       axios.post(http.url + 'controladores', form).then(res => {
         if (res.data.ret === 'success') {
+          this.showModal = false
+          this.onGetDynamic()
           this.$toast.add({ severity: 'success', summary: 'Estufa+', detail: 'Salvo com sucesso!!!', life: 3000 })
         } else {
           this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: res.data.motivo, life: 3000 })
         }
-        this.showModal = false
-        this.onGetDynamic()
       }).catch(err => {
         this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: err, life: 3000 })
       })
