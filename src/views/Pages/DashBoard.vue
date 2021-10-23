@@ -1,7 +1,9 @@
 <template>
   <div class="dash">
     <div class="tabletop">
-      <Button :label="btn" @click="sendMessage"/>
+      <Button style="margin-left:5px;margin-top:10px; " label="Conectar ao Servidor" @click="serverConnector"/>
+      <Button style="margin-left:5px;margin-top:10px; " label="Iniciar Monitoramento" @click="sendMessage"/>
+      <Button style="margin-left:10px" label="Parar Monito" @click="closeSessionConnection"/>
     </div>
     <div class="mno">
       <div v-for="co in controladores.obj" :key="co.fase" class="monitores">
@@ -49,21 +51,23 @@ export default {
         })
       }
     },
-    atualiza (message) {
-      this.retorno.push(message)
+    closeSessionConnection () {
+      this.connection.close()
+    },
+    serverConnector () {
+      this.connection = new WebSocket('ws://localhost:8083/controladores')
+
+      this.connection.onopen = (event) => {
+      }
+      this.btn = 'Iniciar Monitor'
+      this.connection.onmessage = (event) => {
+        this.controladores = []
+        this.controladores = JSON.parse(event.data)
+        this.btn = 'Iniciar Monitor'
+      }
     }
   },
   created () {
-    this.connection = new WebSocket('ws://localhost:8083/controladores')
-
-    this.connection.onopen = (event) => {
-    }
-
-    this.connection.onmessage = (event) => {
-      this.controladores = []
-      this.controladores = JSON.parse(event.data)
-      this.btn = 'Iniciar Monitor'
-    }
   },
   watch: {
     $route (to, from) {

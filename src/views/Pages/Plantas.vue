@@ -67,7 +67,7 @@
                           </div>
                         </template>
                     </Column>
-                    <Column :headerStyle="'width: 15%;'" :bodyStyle="'width: 15%;'" field="humidade" header="Humidade">
+                    <Column :headerStyle="'width: 15%;'" :bodyStyle="'width: 15%;'" field="humidade" header="Umidade">
                         <template #editor="slotProps">
                           <div class="p-fluid">
                             <div class="p-field col-sm-12">

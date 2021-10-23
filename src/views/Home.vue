@@ -28,7 +28,7 @@ export default {
             route: 'Nutrientes'
           },
           {
-            name: 'Fases Crecimento',
+            name: 'Estagios',
             icon: 'estufa-fases',
             route: 'FasesCrecimento'
           },
