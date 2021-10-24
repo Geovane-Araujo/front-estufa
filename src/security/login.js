@@ -20,13 +20,17 @@ export default {
     Loading
   },
   methods: {
-    async login () {
+    async login (route) {
       this.showLoading = true
       await axios.post(http.url + 'login', this.form).then(res => {
         if (res.data.ret === 'success') {
           sessionStorage.setItem('token', res.data.obj.token)
           sessionStorage.setItem('user', res.data.obj.nome)
-          this.$router.push('dashboard')
+          if (route === 1) {
+            this.$router.push('dashboard')
+          } else {
+            this.$router.push('monitor')
+          }
         } else {
           this.$toast.add({ severity: 'error', summary: 'Estufa+', detail: res.data.motivo, life: 3000 })
         }

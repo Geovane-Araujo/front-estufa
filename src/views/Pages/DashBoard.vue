@@ -1,8 +1,7 @@
 <template>
-  <div class="dash">
+  <div class="dashboard">
     <div class="tabletop">
-      <Button style="margin-left:5px;margin-top:10px; " label="Conectar ao Servidor" @click="serverConnector"/>
-      <Button style="margin-left:5px;margin-top:10px; " label="Iniciar Monitoramento" @click="sendMessage"/>
+      <Button style="margin-left:13px;margin-top:10px; " label="Iniciar Monitoramento" @click="sendMessage"/>
       <Button style="margin-left:10px" label="Parar Monito" @click="closeSessionConnection"/>
     </div>
     <div class="mno">
@@ -16,6 +15,7 @@
 <script>
 import Button from 'primevue/button'
 import { mapActions, mapState } from 'vuex'
+import sock from '../../util/Util'
 export default {
   data () {
     return {
@@ -40,8 +40,8 @@ export default {
   methods: {
     ...mapActions('sock', ['ActionRefresh']),
     sendMessage () {
-      this.connection.send('Me Retorne')
-      this.connection.onmessage = (event) => {
+      sock.connection.send('Me Retorne')
+      sock.connection.onmessage = (event) => {
         var arRefs = this.$refs
         var a = event.data.split('?')
         var i = 0
@@ -52,22 +52,29 @@ export default {
       }
     },
     closeSessionConnection () {
-      this.connection.close()
+      sock.connection.close()
+      sock.connection = null
     },
     serverConnector () {
-      this.connection = new WebSocket('ws://localhost:8083/controladores')
+      if (sock.connection === null) {
+        sock.connection = new WebSocket('ws://localhost:8083/controladores')
 
-      this.connection.onopen = (event) => {
-      }
-      this.btn = 'Iniciar Monitor'
-      this.connection.onmessage = (event) => {
-        this.controladores = []
-        this.controladores = JSON.parse(event.data)
+        sock.connection.onopen = (event) => {
+        }
         this.btn = 'Iniciar Monitor'
+        sock.connection.onmessage = (event) => {
+          this.controladores = []
+          this.controladores = JSON.parse(event.data)
+          this.btn = 'Iniciar Monitor'
+        }
+      } else {
+        this.closeSessionConnection()
+        this.serverConnector()
       }
     }
   },
   created () {
+    this.serverConnector()
   },
   watch: {
     $route (to, from) {
@@ -84,9 +91,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.tabletop{
-  margin-top:10px;
-}
 .content-card{
   height: 100px;
   width: 100%;
@@ -95,12 +99,8 @@ export default {
   flex-wrap: wrap;
   align-content: stretch;
 }
-.dash{
-  height: 100%;
-  width: 100%;
-}
 .mno{
-  height: 100%;
+  overflow: auto;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -109,7 +109,7 @@ export default {
   height: 48%;
   width: 48%;
   margin: 1%;
-  background-color: #2C3E50;
+  background-color: #32485e;
   -webkit-box-shadow: 8px 9px 10px -2px rgba(0,0,0,0.29);
   box-shadow: 8px 9px 10px -2px rgba(0,0,0,0.29);
   border-radius: 10px;

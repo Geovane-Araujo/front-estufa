@@ -52,6 +52,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import('../security/Login.vue')
+  },
+  {
+    path: '/monitor',
+    name: 'Monitor',
+    component: () => import('../views/Pages/DashBoard.vue')
   }
 ]
 export default routes

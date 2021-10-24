@@ -13,7 +13,12 @@
         </md-field>
         <div class="p-fluid">
           <div class="p-field">
-            <Button @click="login()" label="Acessar"/>
+            <Button @click="login(1)" label="Acessar Administrativo"/>
+          </div>
+        </div>
+        <div class="p-fluid">
+          <div class="p-field">
+            <Button @click="login(2)" label="Acessar Monitoramento"/>
           </div>
         </div>
       </div>

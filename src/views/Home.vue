@@ -43,7 +43,7 @@ export default {
             route: 'Estufas'
           },
           {
-            name: 'Setores',
+            name: 'Canteiros / Bancadas',
             icon: 'estufa-setor',
             route: 'Setores'
           },
