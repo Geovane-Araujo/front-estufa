@@ -32,14 +32,14 @@
                 </div>
               </div>
               <div class="p-field col-sm-4">
-                <label>Fases Crecimento</label>
+                <label>Estagio de Crecimento Atual</label>
                   <div class="p-inputgroup">
                     <InputText v-model="form.descricao" type="text"/>
                     <Button @click="onDataSearch('fases')"  icon="pi pi-search"/>
                 </div>
               </div>
               <div class="p-field col-sm-4">
-                <label>Setor Dentro da Estufa</label>
+                <label>Canteiros / Bancadas</label>
                   <div class="p-inputgroup">
                     <InputText v-model="form.setor" type="text"/>
                     <Button @click="onDataSearch('setor')"  icon="pi pi-search"/>
@@ -97,6 +97,7 @@ import VueLoading from 'vue-loading-overlay'
 import Button from 'primevue/button'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import Dropdown from 'primevue/dropdown'
+import sock from '../../util/Util'
 var PLANTAS_EXCLUIDAS = []
 
 export default {
@@ -178,6 +179,10 @@ export default {
     loading: VueLoading
   },
   mounted () {
+    if (sock.connection !== null) {
+      console.log(sock.connection)
+      sock.connection.close()
+    }
     this.onGetDynamic()
   },
   methods: {

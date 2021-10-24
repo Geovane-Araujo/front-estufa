@@ -23,6 +23,11 @@ export default {
             route: 'Plantas'
           },
           {
+            name: 'Canteiros / Bancadas',
+            icon: 'estufa-setor',
+            route: 'Setores'
+          },
+          {
             name: 'Nutrientes',
             icon: 'estufa-fertilizante',
             route: 'Nutrientes'
@@ -41,11 +46,6 @@ export default {
             name: 'Estufas',
             icon: 'estufa-estufa',
             route: 'Estufas'
-          },
-          {
-            name: 'Canteiros / Bancadas',
-            icon: 'estufa-setor',
-            route: 'Setores'
           },
           {
             name: 'Usuarios',

@@ -49,11 +49,11 @@
             <div class="p-field col-sm-12">
                 <DataTable :value="form.fases" editMode="cell" class="editable-cells-table">
                     <Column :headerStyle="'width: 20%;'" :bodyStyle="'width: 20%;'" field="descricao" header="Fase"></Column>
-                    <Column :headerStyle="'width: 15%;'" :bodyStyle="'width: 15%;'" field="luminosidade" header="Luminosidade">
+                    <Column :headerStyle="'width: 15%;'" :bodyStyle="'width: 15%;'" field="luminosidade" header="Condutividade Eletrica">
                         <template #editor="slotProps">
                           <div class="p-fluid">
                             <div class="p-field col-sm-12">
-                              <InputText v-model="slotProps.data[slotProps.column.field]" />
+                              <InputText v-model="slotProps.data[slotProps.column.field]"/>
                             </div>
                           </div>
                         </template>
@@ -67,7 +67,7 @@
                           </div>
                         </template>
                     </Column>
-                    <Column :headerStyle="'width: 15%;'" :bodyStyle="'width: 15%;'" field="humidade" header="Umidade">
+                    <Column :headerStyle="'width: 15%;'" :bodyStyle="'width: 15%;'" field="humidade" header="Nivel Agua">
                         <template #editor="slotProps">
                           <div class="p-fluid">
                             <div class="p-field col-sm-12">
@@ -76,7 +76,7 @@
                           </div>
                         </template>
                     </Column>
-                    <Column :headerStyle="'width: 15%;'" :bodyStyle="'width: 15%;'" field="temperatura" header="Temperatura">
+                    <Column :headerStyle="'width: 15%;'" :bodyStyle="'width: 15%;'" field="temperatura" header="Temperatura Ideal">
                         <template #editor="slotProps">
                           <div class="p-fluid">
                             <div class="p-field col-sm-12">

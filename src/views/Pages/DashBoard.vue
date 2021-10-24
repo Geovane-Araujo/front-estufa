@@ -65,7 +65,7 @@ export default {
       sock.connection.close()
     },
     serverConnector () {
-      sock.connection = new WebSocket('ws://localhost:8083/controladores')
+      sock.connection = new WebSocket('ws://192.168.2.166:8089/controladores')
       sock.connection.onopen = (event) => {
       }
       sock.connection.onmessage = (event) => {

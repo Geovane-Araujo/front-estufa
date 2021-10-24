@@ -2,7 +2,7 @@
   <div class="setorestufa">
     <loading v-model="isLoading" loader="spinner" color="#000" :can-cancel="true" :is-full-page="true"/>
     <div style="margin-bottom: 20px">
-      <h3>Setores Estufa</h3>
+      <h3>Canteiros / Bancadas</h3>
     </div>
     <div class="grid">
       <datatabe-estufa classname="estufa_setor" :onGetById="onGetById" :columns="fields" ref="datagrid"/>
@@ -13,6 +13,18 @@
           <div class="p-field col-sm-12">
               <label >Descricao</label>
               <InputText v-model="form.descricao" type="text" />
+          </div>
+          <div class="p-field col-sm-4">
+              <label >Quantidade Talhoes</label>
+              <InputText v-model="form.talhoes" type="text" />
+          </div>
+          <div class="p-field col-sm-4">
+              <label >Ph</label>
+              <InputText v-model="form.ph" type="text" />
+          </div>
+          <div class="p-field col-sm-4">
+              <label >Condutividade</label>
+              <InputText v-model="form.condutividade" type="text" />
           </div>
         </div>
         <template #footer>
@@ -60,7 +72,10 @@ export default {
         edit: false,
         dele: false,
         id: '',
+        ph: 0,
+        condutividade: 0,
         descricao: '',
+        talhoes: 0,
         un: ''
       }
     }

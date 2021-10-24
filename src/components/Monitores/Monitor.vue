@@ -5,18 +5,18 @@
     </div>
     <div class="moni">
       <Knob v-model="form[0].valor" :strokeWidth="5" :size="100" valueTemplate="{value}%"/>
-      Agua
+      Nível Agua
     </div>
     <div class="moni">
       <Knob v-model="form[1].valor" :strokeWidth="5" :size="100" valueTemplate="{value}°C"/>
-      Temperatura
+      Temperatura Ambiente
     </div>
     <div class="moni">
-      <Knob v-model="form[2].valor" :strokeWidth="5" :size="100"/>
-      Luminosidade
+      <Knob v-model="form[2].valor" :strokeWidth="5" :min="0" :max="4" :size="100"/>
+      Condutividade Eletrica
     </div>
     <div class="moni">
-      <Knob v-model="form[3].valor" :strokeWidth="5" :size="100"/>
+      <Knob v-model="form[3].valor" :strokeWidth="5" :min="0" :max="14" :size="100"/>
       PH
     </div>
   </div>

@@ -18,12 +18,10 @@
       <div class="sidebar-footer">
       </div>
     </div>
-    <div>
-        <div class="router">
-        <!-- <transition name="animati"> -->
-          <router-view/>
-        <!-- </transition> -->
-      </div>
+      <div class="router">
+      <!-- <transition name="animati"> -->
+        <router-view/>
+      <!-- </transition> -->
     </div>
   </div>
 </template>
@@ -68,7 +66,7 @@ $isMobile: 50px;
   overflow: auto;
   max-width: 100vw;
   max-height: 98vh;
-  background-color: #184e68;
+  background-color: #2C3E50;
 }
 .contennt{
   display: flex;
