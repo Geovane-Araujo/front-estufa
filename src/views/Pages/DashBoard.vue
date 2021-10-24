@@ -1,12 +1,15 @@
 <template>
   <div class="dashboard">
     <div class="tabletop">
-      <Button style="margin-left:13px;margin-top:10px; " label="Iniciar Monitoramento" @click="sendMessage"/>
-      <Button style="margin-left:10px" label="Parar Monito" @click="closeSessionConnection"/>
+      <div class="d-flex flex-row-reverse">
+        <Button style="margin-right:10px;margin-top:10px; " v-show="monitor" label="Sair" @click="exit"/>
+        <Button style="margin-right:13px;margin-top:10px;" label="Parar Monito" @click="closeSessionConnection"/>
+        <Button style="margin-right:10px;margin-top:10px; " label="Iniciar Monitoramento" @click="sendMessage"/>
+      </div>
     </div>
     <div class="mno">
       <div v-for="co in controladores.obj" :key="co.fase" class="monitores">
-        <monitor-estufa :title="co.fase" :ref="co.ref"/>
+        <monitor-estufa :title="co.fase" :maxph="co.ph" :maxcond="co.condutividade" :ref="co.ref"/>
       </div>
     </div>
   </div>
@@ -19,6 +22,7 @@ import sock from '../../util/Util'
 export default {
   data () {
     return {
+      monitor: false,
       connection: null,
       retorno: null,
       btn: 'Conectar',
@@ -33,6 +37,9 @@ export default {
     }
   },
   mounted () {
+    if (this.$route.name === 'Monitor') {
+      this.monitor = true
+    }
   },
   components: {
     Button
@@ -40,7 +47,7 @@ export default {
   methods: {
     ...mapActions('sock', ['ActionRefresh']),
     sendMessage () {
-      sock.connection.send('Me Retorne')
+      sock.connection.send('332')
       sock.connection.onmessage = (event) => {
         var arRefs = this.$refs
         var a = event.data.split('?')
@@ -51,25 +58,21 @@ export default {
         })
       }
     },
+    exit () {
+      this.$router.push('login')
+    },
     closeSessionConnection () {
       sock.connection.close()
-      sock.connection = null
     },
     serverConnector () {
-      if (sock.connection === null) {
-        sock.connection = new WebSocket('ws://localhost:8083/controladores')
-
-        sock.connection.onopen = (event) => {
-        }
-        this.btn = 'Iniciar Monitor'
-        sock.connection.onmessage = (event) => {
-          this.controladores = []
-          this.controladores = JSON.parse(event.data)
-          this.btn = 'Iniciar Monitor'
-        }
-      } else {
-        this.closeSessionConnection()
-        this.serverConnector()
+      sock.connection = new WebSocket('ws://localhost:8083/controladores')
+      sock.connection.onopen = (event) => {
+      }
+      sock.connection.onmessage = (event) => {
+        this.controladores = []
+        console.log(event.data)
+        this.controladores = JSON.parse(event.data)
+        console.log(this.controladores)
       }
     }
   },
@@ -91,6 +94,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dashboard{
+  background-color: #2C3E50;
+}
 .content-card{
   height: 100px;
   width: 100%;
