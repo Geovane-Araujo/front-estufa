@@ -3,7 +3,7 @@
     <div class="tabletop">
       <div class="d-flex flex-row-reverse">
         <Button style="margin-right:10px;margin-top:10px; " v-show="monitor" label="Sair" @click="exit"/>
-        <Button style="margin-right:13px;margin-top:10px;" label="Parar Monito" @click="closeSessionConnection"/>
+        <Button style="margin-right:13px;margin-top:10px;" class="p-button-danger" label="Parar Monitor" @click="closeSessionConnection"/>
         <Button style="margin-right:10px;margin-top:10px; " label="Iniciar Monitoramento" @click="sendMessage"/>
       </div>
     </div>

@@ -8,7 +8,7 @@
       <datatabe-estufa classname="estufa_setor" :onGetById="onGetById" :columns="fields" ref="datagrid"/>
     </div>
     <div>
-      <Dialog :style="{width: '30vw'}" header="Cadastro Setores da Estufa" :visible.sync="showModal" :modal="true">
+      <Dialog :style="{width: '30vw'}" header="Cadastro Canteiros / Talhoes" :visible.sync="showModal" :modal="true">
         <div class="p-fluid row">
           <div class="p-field col-sm-12">
               <label >Descricao</label>

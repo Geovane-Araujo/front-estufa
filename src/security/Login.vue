@@ -3,6 +3,9 @@
     <loading class="loading" :active="showLoading" :height="45" :width="128" background-color="#c9cdf0" color="#232b70" loader="spinner" :is-full-page="true"/>
     <div class="login">
       <div class="formulario">
+        <div class="logo">
+          <img src="../assets/icons/Logo.png" alt="">
+        </div>
         <md-field>
           <label>Usuário</label>
           <md-input class="dd" v-model="form.nome"></md-input>
@@ -31,6 +34,11 @@
 </script>
 
 <style lang="scss" scoped>
+.logo{
+  width: 100%;
+  height: 200px;
+  margin-bottom: 50px;
+}
 .particles{
   height: 100%;
   width: 100%;
